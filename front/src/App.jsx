@@ -1,5 +1,6 @@
 import { Container } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './assets/style/index.css';
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import {Outlet} from "react-router-dom";
