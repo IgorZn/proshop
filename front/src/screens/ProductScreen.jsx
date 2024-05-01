@@ -1,20 +1,27 @@
 import {useParams} from "react-router-dom"
 import { Link } from "react-router-dom"
 import {Row, Col, Image, Card, Button, ListGroup} from "react-bootstrap"
-import React from 'react';
-import products from "../products.js";
+import React, {useEffect, useState} from 'react';
 import Rating from "../components/Rating.jsx";
+import {getProduct} from "../../hooks/requests.js";
 
 
 
 function ProductScreen(props) {
     const { productId } = useParams()
-    const product = products.find((product) => product.id === +productId)
+    const [product, setProduct] = useState({});
+    useEffect(() => {
+        const fetchProduct = async () => {
+            const product = await getProduct(productId)
+            setProduct(product)
+        }
+        fetchProduct()
+    },[productId])
 
     return (
         <>
             <Link to={'/'}>
-                Go Back
+                <Button className="my-3 btn btn-secondary">Go Back</Button>
             </Link>
             <Row>
                 <Col md={5}>

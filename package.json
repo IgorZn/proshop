@@ -1,4 +1,6 @@
 {
-  "dependencies": {
+  "scripts": {
+    "server:dev": "npm run server:nodemon --prefix server",
+    "web:dev": "npm run dev --prefix front"
   }
 }
