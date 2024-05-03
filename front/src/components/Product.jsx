@@ -9,14 +9,14 @@ function Product({product}) {
     return (
         <>
             <Card className={"my-3 p-3 rounded"}>
-                <LinkContainer to={"/product/" + product.id}>
+                <LinkContainer to={"/product/" + product._id}>
                     <Link>
                         <Card.Img src={product.image} variant="top"/>
                     </Link>
                 </LinkContainer>
 
                 <CardBody style={{width: "18em"}}>
-                    <LinkContainer to={"/product/" + product.id}>
+                    <LinkContainer to={"/product/" + product._id}>
                         <Link>
                             <CardTitle as={"div"} style={{width: "12em"}} className={"product-title"}>
                                 <strong>{product.name}</strong>
