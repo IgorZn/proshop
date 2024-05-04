@@ -1,6 +1,7 @@
 {
   "scripts": {
     "server:dev": "npm run server:nodemon --prefix server",
-    "web:dev": "npm run dev --prefix front"
+    "web:dev": "npm run dev --prefix front",
+    "web:server:dev": "npm run server:dev && npm run web:dev"
   }
 }
