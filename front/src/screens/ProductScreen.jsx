@@ -4,6 +4,8 @@ import {Row, Col, Image, Card, Button, ListGroup} from "react-bootstrap"
 import React from 'react';
 import Rating from "../components/Rating.jsx";
 import {useGetProductQuery} from "../slices/productApiSlice.js";
+import Loader from "../components/Loader.jsx";
+import Message from "../components/Message.jsx";
 
 
 function ProductScreen(props) {
@@ -14,9 +16,9 @@ function ProductScreen(props) {
     return (
         <>
             {error ? (
-                <>Oh no, there was an error</>
+                <Message variant="danger">{error}</Message>
             ) : isLoading ? (
-                <>Loading...</>
+                <Loader />
             ) : data.product ? (
                 <>
                     <Link to={'/'}>
