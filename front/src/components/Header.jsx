@@ -8,7 +8,6 @@ import React from 'react';
 
 function Header(props) {
     const { cartItem } = useSelector(state => state.cart);
-    console.log(...cartItem)
 
     return (
         <header>
