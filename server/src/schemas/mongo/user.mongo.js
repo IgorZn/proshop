@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {hashPassword} from "../../helpers/userHelpers.js";
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -20,5 +21,10 @@ const userSchema = new mongoose.Schema({
         default: false
     }
 }, {timestamps: true})
+
+
+userSchema.methods.matchPassword = function (enteredPassword) {
+    return this.password === hashPassword(enteredPassword)
+}
 
 export const User = mongoose.model('User', userSchema)
