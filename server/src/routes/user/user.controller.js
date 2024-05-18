@@ -4,7 +4,11 @@ import jwt from 'jsonwebtoken'
 
 export const registerUser = (req, res) => res.send('register user') // TODO: Register User
 
-export const logoutUser = (req, res) => res.send('logout user')
+export const logoutUser = (req, res) => {
+    delete res.user
+    res.clearCookie('jwt')
+    res.status(200).json({message: 'User logged out'})
+}
 
 export const loginUser = async (req, res) => {
     const loginUser = await User.findOne({email: req.body.login})
@@ -35,7 +39,9 @@ export const loginUser = async (req, res) => {
 
 }
 
-export const getUserProfile = (req, res) => res.send('get userprofile')
+export const getUserProfile = (req, res) => {
+    res.send('get userprofile')
+}
 
 export const updateUserProfile = (req, res) => res.send('update userprofile')
 

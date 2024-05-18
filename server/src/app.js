@@ -3,6 +3,7 @@ import {apiV1} from "./routes/api.js";
 import morgan from 'morgan';
 import cors from 'cors';
 import cookieSession from 'cookie-session';
+import cookieParser from 'cookie-parser';
 import ErrorHandler from "./middleware/ErrorHandler.js";
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(cookieSession({
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
 }))
+app.use(cookieParser());
 
 // ERROR HANDLER MIDDLEWARE
 app.use(ErrorHandler)

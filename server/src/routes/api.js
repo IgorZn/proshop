@@ -9,5 +9,10 @@ apiV1.use('/products', productRouter)
 apiV1.use('/users', userRouter)
 
 apiV1.get("/test", async (req, res) => {
-    return res.status(200).json({status: true, message: "test"});
+    console.log(res.cookies)
+    return res.status(200).json({
+        status: true,
+        message: "test",
+        cookies: req.cookies
+    });
 })
