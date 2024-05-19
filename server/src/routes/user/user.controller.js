@@ -1,8 +1,35 @@
 import {User} from "../../schemas/mongo/user.mongo.js";
-import jwt from 'jsonwebtoken'
+import {createTokenAndSetToCookie, verifyNameEmailPassword} from "../../helpers/userHelpers.js";
 
 
-export const registerUser = (req, res) => res.send('register user') // TODO: Register User
+export const registerUser = async (req, res) => {
+    const {name, login, password} = req.body
+
+    // Validation
+    if(!verifyNameEmailPassword(name, login, password)){
+        return res
+            .status(400)
+            .json({message: 'Invalid name, email or password'})
+    }
+
+    const userExists = await User.findOne({email: login})
+    if(userExists){
+        return res
+            .status(400)
+            .json({message: 'User already exists'})
+    }
+
+    const user = await User.create({name, email: login, password})
+
+    createTokenAndSetToCookie(user, res)
+
+    return res.status(201).json({
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin
+    })
+}
 
 export const logoutUser = (req, res) => {
     delete res.user
@@ -15,15 +42,7 @@ export const loginUser = async (req, res) => {
     const isMatch = loginUser ? await loginUser.matchPassword(req.body.password) : false
 
     if(loginUser && isMatch){
-        const token = jwt.sign({
-            id: loginUser._id},
-            process.env.JWT_SECRET, {expiresIn: '1h'})
-
-        // Set JWT in cookie
-        res.cookie('jwt', token, {
-            httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000
-        })
+        createTokenAndSetToCookie(loginUser, res)
 
         res.json({
             _id: loginUser.id,

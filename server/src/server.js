@@ -11,7 +11,7 @@ const MONGO_URL = process.env.MONGO_URL
 
 const server = http.createServer(app)
 
-server.listen(PORT, '127.0.0.1', async () => {
+server.listen(PORT, '127.0.0.1', async (srvData) => {
     console.log(`Server started on port ${PORT}`)
     console.log(server.address())
 

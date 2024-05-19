@@ -8,9 +8,9 @@ import mongoose from "mongoose";
  * @returns {Promise<*>}
  */
 export const getProducts = async (req, res) => {
-    const products = await Product.find({})
-    return res.status(200).json({status: true, products});
-}
+    await Product.find({})
+        .then(products => res.status(200).json({status: true, products}))
+        .catch(err => res.status(500).json({status: false, message: err.message}))}
 
 /**
  * Get single product by id
