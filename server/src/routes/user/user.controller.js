@@ -58,11 +58,51 @@ export const loginUser = async (req, res) => {
 
 }
 
-export const getUserProfile = (req, res) => {
-    res.send('get userprofile')
+export const getUserProfile = async (req, res) => {
+    await User.findById(req.user._id)
+        .then(user => {
+            if(user){
+                res.status(200).json({
+                    _id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    isAdmin: user.isAdmin
+                })
+            } else {
+                res.status(404).json({message: 'User not found'})
+            }
+        })
+        .catch(err => {
+            res.status(404).json({message: err.message})
+        })
 }
 
-export const updateUserProfile = (req, res) => res.send('update userprofile')
+export const updateUserProfile = async (req, res) => {
+    if(req.body.password){
+        req.body.password = hashPassword(req.body.password)
+    }
+
+    req.body.name = req.body.name || req.user.name
+    req.body.email = req.body.email || req.user.email
+
+    await User.findByIdAndUpdate(req.user._id, {$set: req.body}, {new: true})
+        .then(user => {
+            if(user){
+                res.status(200).json({
+                    _id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    isAdmin: user.isAdmin
+                })
+            } else {
+                res.status(401).json({message: 'User not found'})
+            }
+
+        })
+        .catch(err => {
+            res.status(404).json({message: err.message})
+        })
+}
 
 export const getUsers = (req, res) => res.send('get users')
 
