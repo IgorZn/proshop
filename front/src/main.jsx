@@ -12,6 +12,7 @@ import CartScreen from "./screens/CartScreen.jsx";
 // Redux
 import {Provider} from "react-redux";
 import store from "../store.js";
+import LoginScreen from "./screens/LoginScreen.jsx";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
             {
                 path: "/cart",
                 element: <CartScreen/>,
+            },
+            {
+                path: "/login",
+                element: <LoginScreen/>,
             },
         ],
     },
