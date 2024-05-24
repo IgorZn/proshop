@@ -38,6 +38,7 @@ export const logoutUser = (req, res) => {
 }
 
 export const loginUser = async (req, res) => {
+    console.log(req.body)
     const loginUser = await User.findOne({email: req.body.login})
     const isMatch = loginUser ? await loginUser.matchPassword(req.body.password) : false
 
