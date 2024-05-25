@@ -13,6 +13,7 @@ import CartScreen from "./screens/CartScreen.jsx";
 import {Provider} from "react-redux";
 import store from "../store.js";
 import LoginScreen from "./screens/LoginScreen.jsx";
+import RegisterScreen from "./screens/RegisterScreen.jsx";
 
 const router = createBrowserRouter([
     {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
             {
                 path: "/login",
                 element: <LoginScreen/>,
+            },
+            {
+                path: "/register",
+                element: <RegisterScreen/>,
             },
         ],
     },

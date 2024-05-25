@@ -30,11 +30,15 @@ function LoginScreen(props) {
 
 
     const submitHandler = async (e) => {
-        e.preventDefault();
-        const res = await auth({login, password}).unwrap()
-        console.log(res)
-        dispatch(setCredentials({ ...res }));
-        navigate(redirect || '/');
+        try {
+            e.preventDefault();
+            const res = await auth({login, password}).unwrap()
+            console.log(res)
+            dispatch(setCredentials({ ...res }));
+            navigate(redirect || '/');
+        } catch (e) {
+            toast.error(e.data.message);
+        }
     }
 
     return (
