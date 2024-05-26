@@ -8,12 +8,14 @@ import ErrorPage from "./screens/ErrorScreen.jsx";
 import HomeScreen from "./screens/HomeScreen.jsx";
 import ProductScreen from "./screens/ProductScreen.jsx";
 import CartScreen from "./screens/CartScreen.jsx";
+import LoginScreen from "./screens/LoginScreen.jsx";
+import RegisterScreen from "./screens/RegisterScreen.jsx";
+import ShippingScreen from "./screens/ShippingScreen.jsx";
 
 // Redux
 import {Provider} from "react-redux";
 import store from "../store.js";
-import LoginScreen from "./screens/LoginScreen.jsx";
-import RegisterScreen from "./screens/RegisterScreen.jsx";
+
 
 const router = createBrowserRouter([
     {
@@ -40,6 +42,10 @@ const router = createBrowserRouter([
             {
                 path: "/register",
                 element: <RegisterScreen/>,
+            },
+            {
+                path: "/shipping",
+                element: <ShippingScreen/>,
             },
         ],
     },

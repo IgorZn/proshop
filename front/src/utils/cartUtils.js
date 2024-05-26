@@ -18,6 +18,7 @@ export const updateCart = (state) => {
         Number(state.itemsPrice) + Number(state.shippingPrice) + Number(state.taxPrice)
     )
 
+    // Save cart to localStorage
     localStorage.setItem("cart", JSON.stringify(state))
 
     return state
