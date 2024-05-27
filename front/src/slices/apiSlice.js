@@ -5,6 +5,7 @@ const URL = BASE_URL + API_VERSION
 // const URL = 'https://pokeapi.co/api/v2/'
 
 export const apiSlice = createApi({
+    reducerPath: 'api',
     baseQuery: fetchBaseQuery({ baseUrl: URL }),
     tagTypes: ['Products', 'Orders', 'User'],
     endpoints: () => ({}),

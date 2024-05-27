@@ -4,6 +4,7 @@ import {updateCart} from "../utils/cartUtils.js";
 
 
 const cartSlice = createSlice({
+    reducerPath: "cart",
     name: "cart",
     initialState: localStorage.getItem("cart") ?
         JSON.parse(localStorage.getItem("cart")) :

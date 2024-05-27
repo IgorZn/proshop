@@ -35,7 +35,7 @@ function CartScreen(props) {
                     (
                         <ListGroup variant={'flush'}>
                             {cartItem.map(item => (
-                                <ListGroup.Item key={item.product}>
+                                <ListGroup.Item key={item._id}>
                                     <Row>
                                         <Col md={2}>
                                             <Image src={item.image} alt={item.name} fluid rounded/>
