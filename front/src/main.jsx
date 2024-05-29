@@ -15,6 +15,7 @@ import ShippingScreen from "./screens/ShippingScreen.jsx";
 // Redux
 import {Provider} from "react-redux";
 import store from "../store.js";
+import PaymentScreen from "./screens/PaymentScreen.jsx";
 
 const router = createBrowserRouter([
     {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
             {
                 path: "/shipping",
                 element: <ShippingScreen/>,
+            },
+            {
+                path: "/payment",
+                element: <PaymentScreen/>,
             },
         ],
     },
