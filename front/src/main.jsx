@@ -16,7 +16,6 @@ import ShippingScreen from "./screens/ShippingScreen.jsx";
 import {Provider} from "react-redux";
 import store from "../store.js";
 
-
 const router = createBrowserRouter([
     {
         path: "/",
