@@ -30,12 +30,11 @@ export const addOrderItem = async (req, res) => {
         })
         res.status(200).json({status: true, order})
     }
-
-
 }
 
 /**
- * Retrieves the orders belonging to the authenticated user.
+ * @example /api/v1/orders
+ * @description Retrieves the orders belonging to the authenticated user.
  * @route GET <api_path>/orders/:id
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
