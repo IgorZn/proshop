@@ -6,7 +6,11 @@ export const orderApiSlice = apiSlice.injectEndpoints({
             query: (data) => ({
                 url: `orders`,
                 method: "POST",
-                body: {...data}
+                body: {...data},
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${data.token}`
+                }
             })
         }),
         getOrders: builder.query({

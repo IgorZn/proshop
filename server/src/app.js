@@ -12,13 +12,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 app.use(morgan('combined'))
-app.use(cors({origin: 'http://localhost:5173'}));
+app.use(cors({
+    origin: /^(https?:\/\/)?localhost(:\d+)?$/,
+    credentials: true,
+}));
 app.use(cookieSession({
     name: 'session',
     keys: ['key1', 'key2'],
     maxAge: 24 * 60 * 60 * 1000,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: false,
+    sameSite: 'None',
     httpOnly: true
 }))
 app.use(cookieParser());

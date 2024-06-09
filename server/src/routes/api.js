@@ -13,9 +13,11 @@ apiV1.use('/orders', orderRouter)
 
 apiV1.get("/test", async (req, res) => {
     console.log(res.cookies)
-    return res.status(200).json({
-        status: true,
-        message: "test",
-        cookies: req.cookies
-    });
+    return res
+        .status(200)
+        .json({
+            status: true,
+            message: "test",
+            cookies: req.cookies
+        });
 })

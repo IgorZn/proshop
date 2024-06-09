@@ -3,7 +3,8 @@ import {User} from "../schemas/mongo/user.mongo.js";
 
 
 export const protectedRoute = (req, res, next) => {
-    const cookieToken = req?.cookies.jwt
+    const cookieToken = req?.headers?.authorization.split('Bearer ')[1]
+
     if (cookieToken) {
         jwt.verify(cookieToken, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {

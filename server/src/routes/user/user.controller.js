@@ -6,14 +6,14 @@ export const registerUser = async (req, res) => {
     const {name, login, password} = req.body
 
     // Validation
-    if(!verifyNameEmailPassword(name, login, password)){
+    if (!verifyNameEmailPassword(name, login, password)) {
         return res
             .status(400)
             .json({message: 'Invalid name, email or password'})
     }
 
     const userExists = await User.findOne({email: login})
-    if(userExists){
+    if (userExists) {
         return res
             .status(400)
             .json({message: 'User already exists'})
@@ -38,23 +38,27 @@ export const logoutUser = (req, res) => {
 }
 
 export const loginUser = async (req, res) => {
-    console.log(req.body)
     const loginUser = await User.findOne({email: req.body.login})
     const isMatch = loginUser ? await loginUser.matchPassword(req.body.password) : false
 
-    if(loginUser && isMatch){
-        createTokenAndSetToCookie(loginUser, res)
+    if (loginUser && isMatch) {
+        createTokenAndSetToCookie(loginUser, res, req)
 
-        res.json({
-            _id: loginUser.id,
-            name: loginUser.name,
-            email: loginUser.email,
-            isAdmin: loginUser.isAdmin,
-        })
+        console.log('req.sessionOptions>>>', req.session)
+
+        return res
+            .status(201)
+            .json({
+                _id: loginUser.id,
+                name: loginUser.name,
+                email: loginUser.email,
+                isAdmin: loginUser.isAdmin,
+                token: req.session.token
+            })
     } else {
-        res
+        return res
             .status(404)
-            .json({ message: 'Invalid email or password' })
+            .json({message: 'Invalid email or password'})
     }
 
 }
@@ -62,7 +66,7 @@ export const loginUser = async (req, res) => {
 export const getUserProfile = async (req, res) => {
     await User.findById(req.user._id)
         .then(user => {
-            if(user){
+            if (user) {
                 res.status(200).json({
                     _id: user.id,
                     name: user.name,
@@ -79,7 +83,7 @@ export const getUserProfile = async (req, res) => {
 }
 
 export const updateUserProfile = async (req, res) => {
-    if(req.body.password){
+    if (req.body.password) {
         req.body.password = hashPassword(req.body.password)
     }
 
@@ -88,7 +92,7 @@ export const updateUserProfile = async (req, res) => {
 
     await User.findByIdAndUpdate(req.user._id, {$set: req.body}, {new: true})
         .then(user => {
-            if(user){
+            if (user) {
                 res.status(200).json({
                     _id: user.id,
                     name: user.name,

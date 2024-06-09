@@ -33,7 +33,6 @@ function LoginScreen(props) {
         try {
             e.preventDefault();
             const res = await auth({login, password}).unwrap()
-            console.log(res)
             dispatch(setCredentials({ ...res }));
             navigate(redirect || '/');
         } catch (e) {

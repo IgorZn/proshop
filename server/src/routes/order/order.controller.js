@@ -2,7 +2,7 @@ import {Order} from "../../schemas/mongo/order.mongo.js";
 
 export const addOrderItem = async (req, res) => {
     const {
-        cartItem,
+        orderItems,
         shippingAddress,
         paymentMethod,
         itemsPrice,
@@ -15,9 +15,9 @@ export const addOrderItem = async (req, res) => {
         res.status(400).json({status: false, message: "No order items"})
     } else {
         const order = await Order.create({
-            orderItems: cartItem.map(item => ({
+            orderItems: orderItems.map(item => ({
                 ...item,
-                product: item.product._id,
+                product: item._id,
                 _id: undefined
             })),
             user: req.user._id,
