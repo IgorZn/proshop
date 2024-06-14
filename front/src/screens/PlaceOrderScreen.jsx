@@ -29,7 +29,7 @@ function PlaceOrderScreen() {
 
     const placeOrderHandler = async () => {
         try {
-            const {data} = await createOrder({
+            const data = await createOrder({
                 orderItems: cart.cartItem,
                 shippingAddress: cart.shippingAddress,
                 paymentMethod: cart.paymentInfo.paymentMethod,
@@ -40,9 +40,10 @@ function PlaceOrderScreen() {
                 token: userInfo.token
             }).unwrap()
 
-            dispatch(clearCart())
+            console.log('placeOrderHandler>>',data)
             localStorage.removeItem('cartItem')
             navigater(`/order/${data.order._id}`)
+            dispatch(clearCart())
         } catch (error) {
             toast.error(error)
         }

@@ -17,6 +17,7 @@ import {Provider} from "react-redux";
 import store from "../store.js";
 import PaymentScreen from "./screens/PaymentScreen.jsx";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen.jsx";
+import OrderScreen from "./screens/OrderScreen.jsx";
 
 const router = createBrowserRouter([
     {
@@ -51,10 +52,14 @@ const router = createBrowserRouter([
             {
                 path: "/payment",
                 element: <PaymentScreen/>,
-            },,
+            },
             {
                 path: "/placeorder",
                 element: <PlaceOrderScreen/>,
+            },
+            {
+                path: "/order/:id",
+                element: <OrderScreen/>,
             },
         ],
     },

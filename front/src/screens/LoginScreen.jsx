@@ -5,7 +5,7 @@ import FormContainer from "../components/FormContainer.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader.jsx";
 import { useAuthMutation } from "../slices/usersApiSlice.js";
-import { setCredentials } from "../slices/authSlice.js";
+import {setCredentials} from "../slices/authSlice.js";
 import { toast } from "react-toastify";
 
 function LoginScreen(props) {
