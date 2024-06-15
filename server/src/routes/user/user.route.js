@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    checkToken,
     deleteUser,
     getUserById,
     getUserProfile,
@@ -27,3 +28,6 @@ userRouter.put("/profile", protectedRoute, updateUserProfile)
 userRouter.get("/:id", protectedRoute, getUserById)
 userRouter.delete("/:id", protectedRoute, deleteUser)
 userRouter.put("/:id", protectedRoute, updateUserById)
+
+// Token check
+userRouter.post("/check-token", checkToken)

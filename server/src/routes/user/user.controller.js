@@ -1,5 +1,6 @@
 import {User} from "../../schemas/mongo/user.mongo.js";
 import {createTokenAndSetToCookie, verifyNameEmailPassword} from "../../helpers/userHelpers.js";
+import jwt from "jsonwebtoken";
 
 
 export const registerUser = async (req, res) => {
@@ -116,3 +117,14 @@ export const getUserById = (req, res) => res.send('get user by id')
 export const deleteUser = (req, res) => res.send('delete users')
 
 export const updateUserById = (req, res) => res.send('update users')
+
+export const checkToken = (req, res) => {
+    const {token} = req.body
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            res.status(401).json({message: 'Invalid token'})
+        } else {
+            res.status(200).json({message: 'Token is valid'})
+        }
+    })
+}

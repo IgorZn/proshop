@@ -10,6 +10,8 @@ import {clearCart} from "../slices/cartSlice.js";
 import {PrivateRoute} from "../components/PrivateRoute.jsx";
 import Loader from "../components/Loader.jsx";
 import {toast} from "react-toastify";
+import {useCheckTokenMutation, useLogoutMutation} from "../slices/usersApiSlice.js";
+import {logout} from "../slices/authSlice.js";
 
 function PlaceOrderScreen() {
     const navigater = useNavigate();
@@ -17,6 +19,8 @@ function PlaceOrderScreen() {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
     const [createOrder, {isLoading, error}] = useCreateOrderMutation();
+    const [checkToken, {data, error: errorToken}] = useCheckTokenMutation();
+    const [logoutCall] = useLogoutMutation();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -28,6 +32,16 @@ function PlaceOrderScreen() {
     }, [cart.paymentInfo, cart.shippingAddress.address, navigater])
 
     const placeOrderHandler = async () => {
+        try {
+            await checkToken({token: userInfo.token}).unwrap()
+        } catch (errorToken) {
+            toast.error(errorToken.data.message)
+            await logoutCall().unwrap()
+            dispatch(logout())
+            return navigater('/login')
+        }
+
+
         try {
             const data = await createOrder({
                 orderItems: cart.cartItem,

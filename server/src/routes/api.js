@@ -11,6 +11,10 @@ apiV1.use('/users', userRouter)
 
 apiV1.use('/orders', orderRouter)
 
+apiV1.get('api/config/paypal', (req, res) => {
+    res.send(process.env.PAYPAL_CLIENT_ID || 'sb')
+})
+
 apiV1.get("/test", async (req, res) => {
     console.log(res.cookies)
     return res

@@ -1,4 +1,3 @@
-import authSlice from "./authSlice.js";
 import {API_VERSION, BASE_URL} from "../../constans.js";
 import {apiSlice} from "./apiSlice.js";
 
@@ -27,8 +26,20 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 body: data
             })
         }),
+        checkToken: builder.mutation({
+            query: (data) => ({
+                url: `${URL}/users/check-token`,
+                method: 'POST',
+                body: data
+            })
+        }),
     })
 })
 
 
-export const { useAuthMutation, useLogoutMutation, useRegisterMutation } = usersApiSlice
+export const {
+    useAuthMutation,
+    useLogoutMutation,
+    useRegisterMutation,
+    useCheckTokenMutation
+} = usersApiSlice
