@@ -18,6 +18,7 @@ import store from "../store.js";
 import PaymentScreen from "./screens/PaymentScreen.jsx";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen.jsx";
 import OrderScreen from "./screens/OrderScreen.jsx";
+import ProfileScreen from "./screens/ProfileScreen.jsx";
 
 const router = createBrowserRouter([
     {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
             {
                 path: "/order/:id",
                 element: <OrderScreen/>,
+            },
+            {
+                path: "/profile",
+                element: <ProfileScreen/>,
             },
         ],
     },

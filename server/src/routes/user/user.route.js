@@ -22,7 +22,7 @@ userRouter.post("/logout", logoutUser)
 
 // profile
 userRouter.get("/profile", protectedRoute, getUserProfile)
-userRouter.put("/profile", protectedRoute, updateUserProfile)
+userRouter.put("/profile", updateUserProfile)
 
 // by Id
 userRouter.get("/:id", protectedRoute, getUserById)

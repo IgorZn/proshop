@@ -84,14 +84,17 @@ export const getUserProfile = async (req, res) => {
 }
 
 export const updateUserProfile = async (req, res) => {
-    if (req.body.password) {
+    console.log('updateUserProfile>>>', req.body)
+    if (req.body.password.length > 0) {
         req.body.password = hashPassword(req.body.password)
+    } else {
+        delete req.body.password
     }
 
     req.body.name = req.body.name || req.user.name
     req.body.email = req.body.email || req.user.email
 
-    await User.findByIdAndUpdate(req.user._id, {$set: req.body}, {new: true})
+    await User.findByIdAndUpdate(req.body._id, {$set: req.body}, {new: true})
         .then(user => {
             if (user) {
                 res.status(200).json({
