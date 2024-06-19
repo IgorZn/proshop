@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import {User} from "../schemas/mongo/user.mongo.js";
+import {json} from "express";
 
 
 export const protectedRoute = (req, res, next, skip= false) => {
@@ -7,21 +8,22 @@ export const protectedRoute = (req, res, next, skip= false) => {
 
     // Check for cookie
     const cookieToken = req?.headers?.authorization?.split('Bearer ')[1]
+    console.log(req.headers)
 
     if (cookieToken) {
         jwt.verify(cookieToken, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
-                console.log(err)
+                console.log(err.message)
                 res.redirect('http://localhost:5173/login')
             } else {
                 // Add user info to req.user
-                req.user = await User.findById(decodedToken.id).select('-password')
+                req.session.user = await User.findById(decodedToken.id).select('-password')
                 next()
             }
         })
     } else {
         console.log('Unauthorized')
-        res.status(401).json({message: 'Unauthorized'})
+        res.status(301).redirect('http://localhost:5173/login')
     }
 }
 

@@ -6,12 +6,16 @@ import {useSelector, useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {useLogoutMutation} from "../slices/usersApiSlice.js";
 import {logout} from "../slices/authSlice.js";
+import {useCookies} from "react-cookie";
 
 import React from 'react';
 
 function Header(props) {
     const {cartItem} = useSelector(state => state.cart);
     const {userInfo} = useSelector(state => state.auth);
+
+    // Cookies
+    const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -20,6 +24,8 @@ function Header(props) {
 
     const logoutHandler = async () => {
         await logoutUser().unwrap()
+        removeCookie('jwt')
+        removeCookie('connect.sid')
         dispatch(logout())
         navigate("/login")
     }

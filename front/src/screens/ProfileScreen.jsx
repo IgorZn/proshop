@@ -8,6 +8,7 @@ import Message from "../components/Message.jsx";
 import Loader from "../components/Loader.jsx";
 import {setCredentials} from "../slices/authSlice.js";
 import {toast} from "react-toastify";
+import {useGetOrdersQuery} from "../slices/orderApiSlice.js";
 
 
 function ProfileScreen() {
@@ -21,6 +22,10 @@ function ProfileScreen() {
     const navigate = useNavigate();
     const {userInfo} = useSelector((state) => state.auth);
     const [profile, {isLoading, error}] = useProfileMutation();
+
+    // Get My Orders
+    const {myOrders, isLoading: loadingOrders, error: errorOrders} = useGetOrdersQuery();
+    console.log(myOrders)
 
     useEffect(() => {
         if (!userInfo) {

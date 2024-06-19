@@ -8,10 +8,8 @@ import Message from "../components/Message.jsx";
 
 function OrderScreen(props) {
     const {id} = useParams();
-    const {data, isLoading, error, refetch} = useGetOrderByIdQuery(id);
+    const {data, isLoading, error, location} = useGetOrderByIdQuery(id);
     const dispatch = useDispatch()
-
-    console.log(data)
 
     return isLoading ? <Loader/>
         : error

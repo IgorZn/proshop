@@ -14,13 +14,17 @@ export const orderApiSlice = apiSlice.injectEndpoints({
             })
         }),
         getOrders: builder.query({
-            query: () => `orders`,
+            query: () => `orders/mine`,
             keepUnusedDataFor: 5
         }),
         getOrderById: builder.query({
             query: (orderId) => ({
                 url: `orders/${orderId}`,
-        }),
+            }),
+            transformResponse: async (response, meta) => {
+                console.log('getOrderById',meta.response.text())
+                return {...response}
+            },
             keepUnusedDataFor: 5
         }),
         addOrderItem: builder.mutation({

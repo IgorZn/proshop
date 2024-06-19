@@ -12,6 +12,7 @@ import Loader from "../components/Loader.jsx";
 import {toast} from "react-toastify";
 import {useCheckTokenMutation, useLogoutMutation} from "../slices/usersApiSlice.js";
 import {logout} from "../slices/authSlice.js";
+import {useCheckToken} from "../hooks/useCheckToken.js";
 
 function PlaceOrderScreen() {
     const navigater = useNavigate();
@@ -31,35 +32,34 @@ function PlaceOrderScreen() {
         }
     }, [cart.paymentInfo, cart.shippingAddress.address, navigater])
 
+    const {data: tokenStatus} = useCheckToken(userInfo)
+
     const placeOrderHandler = async () => {
-        try {
-            await checkToken({token: userInfo.token}).unwrap()
-        } catch (errorToken) {
-            toast.error(errorToken.data.message)
-            await logoutCall().unwrap()
+        if(tokenStatus.status) {
+            try {
+                const data = await createOrder({
+                    orderItems: cart.cartItem,
+                    shippingAddress: cart.shippingAddress,
+                    paymentMethod: cart.paymentInfo.paymentMethod,
+                    itemsPrice: cart.itemsPrice,
+                    shippingPrice: cart.shippingPrice,
+                    taxPrice: cart.taxPrice,
+                    totalPrice: cart.totalPrice,
+                    token: userInfo.token
+                }).unwrap()
+
+                localStorage.removeItem('cartItem')
+                navigater(`/order/${data.order._id}`)
+                dispatch(clearCart())
+            } catch (error) {
+                toast.error(error)
+            }
+
+        } else {
+            toast.error(tokenStatus.message + ' Please login again')
             dispatch(logout())
-            return navigater('/login')
-        }
-
-
-        try {
-            const data = await createOrder({
-                orderItems: cart.cartItem,
-                shippingAddress: cart.shippingAddress,
-                paymentMethod: cart.paymentInfo.paymentMethod,
-                itemsPrice: cart.itemsPrice,
-                shippingPrice: cart.shippingPrice,
-                taxPrice: cart.taxPrice,
-                totalPrice: cart.totalPrice,
-                token: userInfo.token
-            }).unwrap()
-
-            console.log('placeOrderHandler>>',data)
-            localStorage.removeItem('cartItem')
-            navigater(`/order/${data.order._id}`)
-            dispatch(clearCart())
-        } catch (error) {
-            toast.error(error)
+            logoutCall()
+            navigater('/login')
         }
     }
 

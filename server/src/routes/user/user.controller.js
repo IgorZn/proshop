@@ -22,7 +22,7 @@ export const registerUser = async (req, res) => {
 
     const user = await User.create({name, email: login, password})
 
-    createTokenAndSetToCookie(user, res)
+    await createTokenAndSetToCookie(user, res)
 
     return res.status(201).json({
         _id: user.id,
@@ -43,7 +43,12 @@ export const loginUser = async (req, res) => {
     const isMatch = loginUser ? await loginUser.matchPassword(req.body.password) : false
 
     if (loginUser && isMatch) {
-        createTokenAndSetToCookie(loginUser, res, req)
+        // await createTokenAndSetToCookie(loginUser, res, req)
+        const token = jwt.sign({id: loginUser._id}, process.env.JWT_SECRET, {expiresIn: '1h'})
+
+        req.session.user = loginUser
+        req.session.token = token
+        res.cookie('jwt', token)
 
         console.log('req.sessionOptions>>>', req.session)
 
@@ -54,7 +59,8 @@ export const loginUser = async (req, res) => {
                 name: loginUser.name,
                 email: loginUser.email,
                 isAdmin: loginUser.isAdmin,
-                token: req.session.token
+                token: req.session.token,
+                sid: req.session.id
             })
     } else {
         return res
@@ -125,9 +131,9 @@ export const checkToken = (req, res) => {
     const {token} = req.body
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-            res.status(401).json({message: 'Invalid token'})
+            res.status(200).json({status: false, message: 'Invalid token'})
         } else {
-            res.status(200).json({message: 'Token is valid'})
+            res.status(200).json({status: true, message: 'Token is valid'})
         }
     })
 }

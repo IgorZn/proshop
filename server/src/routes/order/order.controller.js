@@ -1,6 +1,7 @@
 import {Order} from "../../schemas/mongo/order.mongo.js";
 
 export const addOrderItem = async (req, res) => {
+    console.log('addOrderItem>>>',req.headers)
     const {
         orderItems,
         shippingAddress,
@@ -20,7 +21,7 @@ export const addOrderItem = async (req, res) => {
                 product: item._id,
                 _id: undefined
             })),
-            user: req.user._id,
+            user: req.session.user._id,
             shippingAddress,
             paymentMethod,
             itemsPrice,
@@ -41,7 +42,8 @@ export const addOrderItem = async (req, res) => {
  * @return {Promise<Object>} The response object containing the orders.
  */
 export const getMyOrderItems = async (req, res) => {
-    const orders = await Order.find({user: req.user._id})
+    console.log('getMyOrderItems>>>', req.session)
+    const orders = await Order.find({user: req.session.user._id})
     return res.status(200).json({status: true, orders})
 }
 

@@ -7,20 +7,12 @@ export const hashPassword = (password) => {
         .digest('hex')
 }
 
-export const createTokenAndSetToCookie = (user, res, req) => {
+export const createTokenAndSetToCookie = async (user, res, req) => {
     const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'})
 
-    res.user = user
+    req.session.user = user
     req.session.token = token
-    res.cookie('jwt', token, {
-        path: '/',
-        httpOnly: true,
-        sameSite: 'none',
-        domain: 'localhost:5173',
-        secure: false,
-        maxAge: 24 * 60 * 60 * 1000
-    })
-
+    res.cookie('jwt', token)
 }
 
 export const verifyNameEmailPassword = (name, email, password) => {

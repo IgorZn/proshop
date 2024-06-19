@@ -4,7 +4,8 @@ const Message = ({variant, children}) => {
 
     return (
         <Alert variant={variant}>
-            {children}
+            {/* eslint-disable-next-line react/prop-types */}
+            {children?.error ? children.error : children}
         </Alert>
     )
 }

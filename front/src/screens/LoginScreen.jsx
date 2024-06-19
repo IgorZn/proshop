@@ -7,8 +7,13 @@ import Loader from "../components/Loader.jsx";
 import { useAuthMutation } from "../slices/usersApiSlice.js";
 import {setCredentials} from "../slices/authSlice.js";
 import { toast } from "react-toastify";
+import {useCookies} from "react-cookie";
 
 function LoginScreen(props) {
+    // Cookies
+    const [cookies, setCookie, removeCookie] = useCookies('jwt');
+
+
     const [login, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -33,6 +38,8 @@ function LoginScreen(props) {
         try {
             e.preventDefault();
             const res = await auth({login, password}).unwrap()
+            // setCookie('jwt', res.token, {path: '/'})
+            // setCookie('connect.sid', res.sid, {path: '/'})
             dispatch(setCredentials({ ...res }));
             navigate(redirect || '/');
         } catch (e) {

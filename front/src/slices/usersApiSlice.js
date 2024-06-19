@@ -9,8 +9,11 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             query: (data) => ({
                 url: `${URL}/users/login`,
                 method: 'POST',
-                body: data
-            })
+                body: data,
+            }),
+            transformResponse: async (response, meta) => {
+                return {...response, koo: 'hui'}
+            },
         }),
         logout: builder.mutation({
             query: (data) => ({

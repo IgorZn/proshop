@@ -2,6 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 
+// Cookies
+import {CookiesProvider} from "react-cookie";
+
 // Routing
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ErrorPage from "./screens/ErrorScreen.jsx";
@@ -73,7 +76,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <Provider store={store}>
-            <RouterProvider router={router}/>
+            <CookiesProvider>
+                <RouterProvider router={router}/>
+            </CookiesProvider>
         </Provider>
     </React.StrictMode>,
 )

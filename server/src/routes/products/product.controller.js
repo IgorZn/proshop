@@ -8,6 +8,8 @@ import mongoose from "mongoose";
  * @returns {Promise<*>}
  */
 export const getProducts = async (req, res) => {
+    console.log('getProducts>>>', req.session.id)
+    // console.log('getProducts>>>', req.session)
     await Product.find({})
         .then(products => res.status(200).json({status: true, products}))
         .catch(err => res.status(500).json({status: false, message: err.message}))}
