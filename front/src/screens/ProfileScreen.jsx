@@ -4,13 +4,13 @@ import {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {Table, Form, Button, Row, Col} from "react-bootstrap";
+import {FaTimes} from "react-icons/fa";
 import Message from "../components/Message.jsx";
 import Loader from "../components/Loader.jsx";
 import {logout, setCredentials} from "../slices/authSlice.js";
 import {toast} from "react-toastify";
 import {useGetMyOrdersQuery} from "../slices/orderApiSlice.js";
 import {useCheckToken} from "../hooks/useCheckToken.js";
-
 
 
 function ProfileScreen() {
@@ -55,7 +55,7 @@ function ProfileScreen() {
             setMessage('Passwords do not match');
         } else {
             try {
-                const res = await profile({_id:userInfo._id, name, email, password}).unwrap();
+                const res = await profile({_id: userInfo._id, name, email, password}).unwrap();
                 dispatch(setCredentials({...res}));
                 toast.success('Profile updated successfully');
             } catch (err) {
@@ -119,13 +119,47 @@ function ProfileScreen() {
                 </Col>
                 <Col md={9}>
                     <h2>My Orders</h2>
-                    {/*{myOrdersData.map(order => (*/}
-                    {/*    <Row key={order._id}>*/}
-                    {/*        <Col>*/}
-                    {/*            <h3>{order._id}</h3>*/}
-                    {/*        </Col>*/}
-                    {/*    </Row>*/}
-                    {/*))}*/}
+                    {loadingMyOrders ?
+                        <Loader/> : errorMyOrders ?
+                            (<Message variant='danger'>{errorMyOrders?.data.message || errorMyOrders.error}</Message>) :
+                            (
+                                <Table striped hover responsive className='table-sm'>
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>DATE</th>
+                                        <th>TOTAL</th>
+                                        <th>PAID</th>
+                                        <th>DELIVERED</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {myOrdersData.orders.map((order) => (
+                                        <tr key={order._id}>
+                                            <td>{order._id}</td>
+                                            <td>{order.createdAt.substring(0, 10)}</td>
+                                            <td>{order.totalPrice}</td>
+                                            <td>{order.isPaid ? (
+                                                order.paidAt.substring(0, 10)
+                                            ) : (
+                                                <FaTimes style={{color: 'red'}}></FaTimes>
+                                            )}</td>
+                                            <td>{order.isDelivered ? (
+                                                order.deliveredAt.substring(0, 10)
+                                            ) : (
+                                                <FaTimes style={{color: 'red'}}></FaTimes>
+                                            )}</td>
+                                            <td>
+                                                <Button className='btn-sm' variant='light'>
+                                                    Details
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </Table>
+                            )}
                 </Col>
             </Row>
         </PrivateRoute>
