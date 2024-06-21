@@ -42,7 +42,8 @@ export const addOrderItem = async (req, res) => {
  * @return {Promise<Object>} The response object containing the orders.
  */
 export const getMyOrderItems = async (req, res) => {
-    console.log('getMyOrderItems>>>', req.session)
+    console.log('getMyOrderItems-session>>>', req.session)
+    console.log('getMyOrderItems-headers>>>', req.headers)
     const orders = await Order.find({user: req.session.user._id})
     return res.status(200).json({status: true, orders})
 }

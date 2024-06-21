@@ -15,7 +15,7 @@ function Header(props) {
     const {userInfo} = useSelector(state => state.auth);
 
     // Cookies
-    const [cookies, setCookie, removeCookie] = useCookies(['jwt']);
+    const [cookies, setCookie, removeCookie, getCookie] = useCookies(['jwt']);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -24,8 +24,10 @@ function Header(props) {
 
     const logoutHandler = async () => {
         await logoutUser().unwrap()
+
         removeCookie('jwt')
         removeCookie('connect.sid')
+
         dispatch(logout())
         navigate("/login")
     }

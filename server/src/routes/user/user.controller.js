@@ -35,6 +35,7 @@ export const registerUser = async (req, res) => {
 export const logoutUser = (req, res) => {
     delete res.user
     res.clearCookie('jwt')
+    res.clearCookie('connect.sid')
     res.status(200).json({message: 'User logged out'})
 }
 

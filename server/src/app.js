@@ -16,13 +16,12 @@ app.use(morgan('combined'))
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true,
-    allowedHeaders: 'Content-Type,Authorization',
+    allowedHeaders: 'Content-Type,Authorization,Access-Control-Expose-Headers',
     exposedHeaders: 'Content-Type,Authorization,Access-Control-Expose-Headers'
 }));
 app.use(session({
     secret: 'keyboard cat',
-    maxAge: 24 * 60 * 60 * 1000,
-    cookie: { maxAge: 60000, secure: false, sameSite: 'none', httpOnly: true},
+    cookie: { maxAge: null, secure: false, httpOnly: true},
     resave: false,
     saveUninitialized: false,
 

@@ -8,7 +8,6 @@ import mongoose from "mongoose";
  * @returns {Promise<*>}
  */
 export const getProducts = async (req, res) => {
-    console.log('getProducts>>>', req.session.id)
     // console.log('getProducts>>>', req.session)
     await Product.find({})
         .then(products => res.status(200).json({status: true, products}))
@@ -21,6 +20,8 @@ export const getProducts = async (req, res) => {
  * @returns {Promise<*>}
  */
 export const getProduct = async (req, res) => {
+    console.log('getProduct>>>', req.headers)
+    console.log('getProduct>>>', req.session.id)
     let product
     if(mongoose.isValidObjectId(req.params.id)){
         product = await Product.findById(req.params.id)

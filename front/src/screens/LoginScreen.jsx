@@ -40,6 +40,7 @@ function LoginScreen(props) {
             const res = await auth({login, password}).unwrap()
             // setCookie('jwt', res.token, {path: '/'})
             // setCookie('connect.sid', res.sid, {path: '/'})
+
             dispatch(setCredentials({ ...res }));
             navigate(redirect || '/');
         } catch (e) {

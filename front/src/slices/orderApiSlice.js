@@ -1,4 +1,5 @@
 import {apiSlice} from "./apiSlice.js";
+import Cookies from 'js-cookie'
 
 export const orderApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -13,10 +14,6 @@ export const orderApiSlice = apiSlice.injectEndpoints({
                 }
             })
         }),
-        getOrders: builder.query({
-            query: () => `orders/mine`,
-            keepUnusedDataFor: 5
-        }),
         getOrderById: builder.query({
             query: (orderId) => ({
                 url: `orders/${orderId}`,
@@ -25,6 +22,13 @@ export const orderApiSlice = apiSlice.injectEndpoints({
                 console.log('getOrderById',meta.response.text())
                 return {...response}
             },
+            keepUnusedDataFor: 5
+        }),
+        getMyOrders: builder.query({
+            query: () => ({
+                url: `orders/mine`,
+                method: "GET",
+        }),
             keepUnusedDataFor: 5
         }),
         addOrderItem: builder.mutation({
@@ -51,8 +55,8 @@ export const orderApiSlice = apiSlice.injectEndpoints({
 
 export const {
     useCreateOrderMutation,
-    useGetOrdersQuery,
     useGetOrderByIdQuery,
+    useGetMyOrdersQuery,
     useAddOrderItemMutation,
     useUpdateOrderToPaidMutation,
     useUpdateOrderToDeliveredMutation
