@@ -20,8 +20,8 @@ export const getProducts = async (req, res) => {
  * @returns {Promise<*>}
  */
 export const getProduct = async (req, res) => {
-    console.log('getProduct>>>', req.headers)
-    console.log('getProduct>>>', req.session.id)
+    // console.log('getProduct>>>', req.headers)
+    // console.log('getProduct>>>', req.session.id)
     let product
     if(mongoose.isValidObjectId(req.params.id)){
         product = await Product.findById(req.params.id)

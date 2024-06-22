@@ -79,5 +79,7 @@ export const updateOrderToDelivered = async (req, res) => {
 }
 
 export const getOrders = async (req, res) => {
-    return res.status(200).json({status: true, message: "getOrders"})
+    const orders = await Order.find({})
+        .populate('user', 'id email')
+    return res.status(200).json({status: true, orders})
 }

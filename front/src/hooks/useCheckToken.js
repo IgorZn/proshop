@@ -6,10 +6,10 @@ import {toast} from "react-toastify";
 
 
 export function useCheckToken(userInfo) {
-    const navigate = useNavigate();
-    const {token} = userInfo
+    const {token} = userInfo || {};
     const [resStatus, setResStatus] = useState(null)
     const [checkToken, {data, error, isLoading}] = useCheckTokenMutation();
+
 
     const getTokenStatus = useCallback(async () => {
         await checkToken({token})

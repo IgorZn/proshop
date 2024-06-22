@@ -8,7 +8,7 @@ export const protectedRoute = (req, res, next, skip= false) => {
 
     // Check for cookie
     const cookieToken = req?.headers?.authorization?.split('Bearer ')[1]
-    console.log(req.headers)
+    // console.log(req.headers)
 
     if (cookieToken) {
         jwt.verify(cookieToken, process.env.JWT_SECRET, async (err, decodedToken) => {
@@ -28,7 +28,8 @@ export const protectedRoute = (req, res, next, skip= false) => {
 }
 
 export const adminRoute = (req, res, next) => {
-    if (req.user && req.user.isAdmin) {
+    console.log('adminRoute>>>',req.session.user)
+    if (req.session.user && req.session.user.isAdmin) {
         next()
     } else {
         res.status(401).json({message: 'Unauthorized'})

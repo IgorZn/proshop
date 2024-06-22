@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 app.use(morgan('combined'))
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', "http://localhost:5001"],
     credentials: true,
     allowedHeaders: 'Content-Type,Authorization,Access-Control-Expose-Headers',
     exposedHeaders: 'Content-Type,Authorization,Access-Control-Expose-Headers'
