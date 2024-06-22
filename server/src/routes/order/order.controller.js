@@ -71,11 +71,21 @@ export const updateOrderToPaid = async (req, res) => {
         const updatedOrder = await order.save()
         return res.status(200).json({status: true, order: updatedOrder})
     } else {
-        return res.status(200).json({status: true, message: "Order not found"})}
+        return res.status(404).json({status: true, message: "Order not found"})
+    }
 }
 
 export const updateOrderToDelivered = async (req, res) => {
-    return res.status(200).json({status: true, message: "updateOrderToDelivered"})
+    const order = await Order.findById(req.params.id)
+    if(order) {
+        order.isDelivered = true
+        order.deliveredAt = Date.now()
+        const updatedOrder = await order.save()
+        return res.status(200).json({status: true, order: updatedOrder})
+    } else {
+        return res.status(404).json({status: true, message: "Order not found"})
+    }
+
 }
 
 export const getOrders = async (req, res) => {

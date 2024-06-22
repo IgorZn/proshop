@@ -1,15 +1,32 @@
 import {Link, useParams} from "react-router-dom";
 import {Row, Col, ListGroup, Image, Card, Button, Form} from "react-bootstrap";
-import {useGetOrderByIdQuery} from "../slices/orderApiSlice.js";
+import {useGetOrderByIdQuery, useUpdateOrderToPaidMutation, useUpdateOrderToDeliveredMutation} from "../slices/orderApiSlice.js";
 import {PrivateRoute} from "../components/PrivateRoute.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../components/Loader.jsx";
 import Message from "../components/Message.jsx";
+import {toast} from "react-toastify";
 
 function OrderScreen(props) {
     const {id} = useParams();
-    const {data, isLoading, error, location} = useGetOrderByIdQuery(id);
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    const {data, isLoading, error, location, refetch} = useGetOrderByIdQuery(id);
+    const [updateOrderToPaid, {isLoading: loadingPaid}] = useUpdateOrderToPaidMutation();
+    const [updateOrderToDelivered, {isLoading: loadingDelivered}] = useUpdateOrderToDeliveredMutation();
     const dispatch = useDispatch()
+
+    const updateOrderToPaidHelper = async () => {
+        await updateOrderToPaid(data.order._id)
+        refetch()
+        toast.success('Order paid successfully')
+
+    }
+
+    const updateOrderToDeliveredHelper = async () => {
+        await updateOrderToDelivered(data.order._id)
+        refetch()
+        toast.success('Order delivered successfully')
+    }
 
     return isLoading ? <Loader/>
         : error
@@ -34,7 +51,7 @@ function OrderScreen(props) {
                                     </p>
                                     {data.order.isDelivered ? (
                                         <Message variant="success">
-                                            Delivered on {data.order.deliveredAt}
+                                            Delivered on {data.order.deliveredAt.substring(0, 10)}
                                         </Message>
                                     ) : (
                                         <Message variant="danger">Not Delivered</Message>
@@ -49,7 +66,7 @@ function OrderScreen(props) {
                                         {data.order.paymentMethod}
                                     </p>
                                     {data.order.isPaid ? (
-                                        <Message variant="success">Paid on {data.order.paidAt}</Message>
+                                        <Message variant="success">Paid on {data.order.paidAt.substring(0, 10)}</Message>
                                     ) : (
                                         <Message variant="danger">Not Paid</Message>
                                     )}
@@ -122,11 +139,40 @@ function OrderScreen(props) {
                                         </Row>
                                     </ListGroup.Item>
                                     <ListGroup.Item>
-                                        {data.order.isPaid ? (
-                                            <Message variant="success">Paid on {data.order.paidAt}</Message>
-                                        ) : (
-                                            <Message variant="danger">Not Paid</Message>
-                                        )}
+                                        <Row>
+                                            <Col>
+                                                {data.order.isPaid ? (
+                                                    <Message variant="success">Paid on {data.order.paidAt.substring(0, 10)}</Message>
+                                                ) : (
+                                                    <Message variant="danger">Not Paid</Message>
+                                                )}
+                                            </Col>
+                                            <Col>
+                                                {(data.order.isPaid && userInfo.isAdmin) ? (
+                                                    <Button disabled={true} variant={"secondary"}>Pay Order</Button>
+                                                ) : (
+                                                    <Button onClick={updateOrderToPaidHelper}>Pay Order</Button>
+                                                )}
+                                            </Col>
+                                        </Row>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        <Row>
+                                            <Col>
+                                                {(data.order.isDelivered) ? (
+                                                    <Message variant="success">Delivered on {data.order.deliveredAt.substring(0,10)}</Message>
+                                                ) : (
+                                                    <Message variant="danger">Not Delivered</Message>
+                                                )}
+                                            </Col>
+                                            <Col>
+                                                {(data.order.isDelivered && userInfo.isAdmin) ? (
+                                                    <Button disabled={true} variant={"secondary"}>Delivered Order</Button>
+                                                ) : (
+                                                    <Button onClick={updateOrderToDeliveredHelper}>Delivered Order</Button>
+                                                )}
+                                            </Col>
+                                        </Row>
                                     </ListGroup.Item>
                                 </ListGroup>
                             </Card>

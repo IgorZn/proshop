@@ -19,8 +19,7 @@ export const orderApiSlice = apiSlice.injectEndpoints({
                 url: `orders/${orderId}`,
             }),
             transformResponse: async (response, meta) => {
-                console.log('getOrderById',meta.response.text())
-                return {...response}
+                return {...response, bigData: 'meta.bigData'}
             },
             keepUnusedDataFor: 5
         }),
@@ -45,7 +44,7 @@ export const orderApiSlice = apiSlice.injectEndpoints({
         }),
         updateOrderToDelivered: builder.mutation({
             query: (orderId) => ({
-                url: `orders/deliver/${orderId}`,
+                url: `orders/${orderId}/deliver`,
                 method: "PUT"
             })
         }),
