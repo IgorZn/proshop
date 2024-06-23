@@ -1,8 +1,8 @@
 import {Link, useParams} from "react-router-dom";
-import {Row, Col, ListGroup, Image, Card, Button, Form} from "react-bootstrap";
+import {Row, Col, ListGroup, Image, Card, Button} from "react-bootstrap";
 import {useGetOrderByIdQuery, useUpdateOrderToPaidMutation, useUpdateOrderToDeliveredMutation} from "../slices/orderApiSlice.js";
 import {PrivateRoute} from "../components/PrivateRoute.jsx";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import Loader from "../components/Loader.jsx";
 import Message from "../components/Message.jsx";
 import {toast} from "react-toastify";

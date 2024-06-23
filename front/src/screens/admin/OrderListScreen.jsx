@@ -22,6 +22,7 @@ function OrderListScreen(props) {
     const navigater = useNavigate();
     const dispatch = useDispatch();
 
+
     const logoutHandler = async () => {
         await logoutCall()
         dispatch(logout());
@@ -30,7 +31,6 @@ function OrderListScreen(props) {
 
     useEffect(() => {
         if(tokenStatus?.status !== undefined){
-            console.log('useEffect', tokenStatus?.status)
             !tokenStatus?.status && logoutHandler()
         }
     }, [tokenLoading]);

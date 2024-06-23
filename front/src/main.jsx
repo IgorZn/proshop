@@ -18,11 +18,13 @@ import ShippingScreen from "./screens/ShippingScreen.jsx";
 // Redux
 import {Provider} from "react-redux";
 import store from "../store.js";
+
 import PaymentScreen from "./screens/PaymentScreen.jsx";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen.jsx";
 import OrderScreen from "./screens/OrderScreen.jsx";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
 import OrderListScreen from "./screens/admin/OrderListScreen.jsx";
+import ProductListScreen from "./screens/admin/ProductListScreen.jsx";
 
 const router = createBrowserRouter([
     {
@@ -73,6 +75,10 @@ const router = createBrowserRouter([
             {
                 path: "/admin/orderlist",
                 element: <OrderListScreen/>,
+            },
+            {
+                path: "/admin/productlist",
+                element: <ProductListScreen/>,
             },
         ],
     },
