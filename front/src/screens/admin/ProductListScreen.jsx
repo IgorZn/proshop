@@ -1,24 +1,56 @@
 import AdminRoute from "../../components/AdminRoute.jsx";
-import {Button, Row, Table} from "react-bootstrap";
+import {Button, Col, Row, Table} from "react-bootstrap";
 import {FaEdit, FaTimes, FaTrash} from "react-icons/fa";
 import {LinkContainer} from "react-router-bootstrap";
-import {useGetProductsQuery} from "../../slices/productApiSlice.js";
+import {useAddProductMutation, useGetProductsQuery} from "../../slices/productApiSlice.js";
 import Message from "../../components/Message.jsx";
 import Loader from "../../components/Loader.jsx";
+import {toast} from "react-toastify";
+import {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+import {useLogoutMutation} from "../../slices/usersApiSlice.js";
+import {useDispatch} from "react-redux";
+import {logout} from "../../slices/authSlice.js";
+
 
 function ProductListScreen(props) {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [logoutCall] = useLogoutMutation();
     const {data, isLoading, error} = useGetProductsQuery();
+    const [addProduct, {isLoading: addProductIsLoading, error: addProductError}] = useAddProductMutation();
 
-    console.log(data)
+    const createProductHandler = async () => {
+        await addProduct({
+            name: 'sample name ' + Date.now(),
+            price: 0, image: '/images/sample.jpg',
+            brand: 'sample brand',
+            category: 'sample category',
+            countInStock: 0,
+            description: 'sample description'})
+    }
+
+    useEffect(() => {
+        if(addProductError) {
+            toast.error(addProductError?.data.message)
+            logoutCall()
+            dispatch(logout());
+            navigate('/login')
+        }
+
+    }, [isLoading]);
 
     return (
         <AdminRoute>
-            <Row className="align-items-center">
-                <h1>Products</h1>
-                <LinkContainer to="/admin/product/create">
-                    <Button className="my-3">Create Product</Button>
-                </LinkContainer>
+            <Row>
+                <Col md={8}><h1>Products</h1></Col>
+                <Col className={'text-end'} md={4}>
+                    <Button className="my-3" onClick={createProductHandler}>Create Product</Button>
+                </Col>
             </Row>
+
+            {addProductIsLoading && <Loader/>}
+
             {isLoading ? (
                 <Loader/>
             ) : error ? (

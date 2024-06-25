@@ -13,8 +13,7 @@ export const protectedRoute = (req, res, next, skip= false) => {
     if (cookieToken) {
         jwt.verify(cookieToken, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
-                console.log(err.message)
-                res.redirect('http://localhost:5173/login')
+                res.status(403).send({status: false, message: err.message})
             } else {
                 // Add user info to req.user
                 req.session.user = await User.findById(decodedToken.id).select('-password')

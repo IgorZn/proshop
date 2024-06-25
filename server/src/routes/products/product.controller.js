@@ -30,6 +30,16 @@ export const getProduct = async (req, res) => {
     return res.status(200).json({status: true, product});
 }
 
+export const createProduct = async (req, res) => {
+    req.body.user = req.session.user._id
+    await Product.create(req.body)
+        .then(product => res.status(201).json({status: true, product}))
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({status: false, message: err.message})
+        })
+}
+
 /**
  * For testing
  * @param req

@@ -10,7 +10,8 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             transformResponse: async (response, meta) => {
                 return {...response, koo: 'meta.response.headers'};
             },
-            keepUnusedDataFor: 5
+            keepUnusedDataFor: 5,
+            providesTags: ['Products']
         }),
 
         getProduct: builder.query({
@@ -19,8 +20,17 @@ export const productsApiSlice = apiSlice.injectEndpoints({
                 return {...response, koo: 'meta.response.headers'};
             },
             keepUnusedDataFor: 5
-        })
+        }),
+
+        addProduct: builder.mutation({
+            query: (product) => ({
+                url: '/products',
+                method: 'POST',
+                body: product
+            }),
+            invalidatesTags: ['Products']
+        }),
     }),
 })
 
-export const { useGetProductsQuery, useGetProductQuery } = productsApiSlice
+export const { useGetProductsQuery, useGetProductQuery, useAddProductMutation } = productsApiSlice
