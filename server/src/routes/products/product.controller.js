@@ -31,7 +31,7 @@ export const getProduct = async (req, res) => {
 }
 
 export const createProduct = async (req, res) => {
-    req.body.user = req.session.user._id
+    req.body.user = req.body.user || req.session.user._id
     await Product.create(req.body)
         .then(product => res.status(201).json({status: true, product}))
         .catch(err => {
@@ -39,6 +39,18 @@ export const createProduct = async (req, res) => {
             res.status(500).json({status: false, message: err.message})
         })
 }
+
+export const editProduct = async (req, res) => {
+    console.log(req.body)
+    // req.body.user = req.body.user || req.session.user._id
+    await Product.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true})
+        .exec()
+        .then(product => res.status(200).json({status: true, product}))
+        .catch(err => res.status(404).json({status: false, message: err.message}))
+}
+
+
+
 
 /**
  * For testing
