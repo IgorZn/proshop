@@ -40,11 +40,12 @@ export const productsApiSlice = apiSlice.injectEndpoints({
                     body
                 }
             },
-
-
             invalidatesTags: ['Products']
         }),
     }),
 })
 
-export const { useGetProductsQuery, useGetProductQuery, useAddProductMutation, useUpdateProductMutation } = productsApiSlice
+export const { useGetProductsQuery,
+    useGetProductQuery,
+    useAddProductMutation,
+    useUpdateProductMutation } = productsApiSlice

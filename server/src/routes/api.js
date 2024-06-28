@@ -2,8 +2,11 @@ import express from "express";
 import {productRouter} from "./products/products.route.js";
 import {userRouter} from "./user/user.route.js";
 import {orderRouter} from "./order/order.route.js";
+import {uploadRouter} from "./upload/upload.route.js";
 
 export const apiV1 = express.Router();
+
+apiV1.use('/upload', uploadRouter)
 
 apiV1.use('/products', productRouter)
 

@@ -21,8 +21,7 @@ export const protectedRoute = (req, res, next, skip= false) => {
             }
         })
     } else {
-        console.log('Unauthorized')
-        res.status(301).redirect('http://localhost:5173/login')
+        res.status(401).json({status: false, message: 'Unauthorized'})
     }
 }
 
