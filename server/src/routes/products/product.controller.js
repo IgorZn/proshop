@@ -49,7 +49,12 @@ export const editProduct = async (req, res) => {
         .catch(err => res.status(404).json({status: false, message: err.message}))
 }
 
-
+export const deleteProduct = async (req, res) => {
+    await Product.findByIdAndDelete(req.params.id)
+        .exec()
+        .then(product => res.status(200).json({status: true, product}))
+        .catch(err => res.status(404).json({status: false, message: err.message}))
+}
 
 
 /**

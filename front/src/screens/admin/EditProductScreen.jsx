@@ -1,5 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {
+    useDeleteProductMutation,
     useGetProductQuery,
     useUpdateProductMutation,
     useUploadProductImageMutation
@@ -120,6 +121,7 @@ function EditProductScreen(props) {
                                     onChange={(e) => setName(e.target.value)}
                                 />
                             </Form.Group>
+
                             <Form.Group controlId="price">
                                 <Form.Label>Price</Form.Label>
                                 <Form.Control
@@ -157,6 +159,7 @@ function EditProductScreen(props) {
                                     onChange={(e) => setBrand(e.target.value)}
                                 />
                             </Form.Group>
+
                             <Form.Group controlId="category">
                                 <Form.Label>Category</Form.Label>
                                 <Form.Control
@@ -166,6 +169,7 @@ function EditProductScreen(props) {
                                     onChange={(e) => setCategory(e.target.value)}
                                 />
                             </Form.Group>
+
                             <Form.Group controlId="countInStock">
                                 <Form.Label>Count In Stock</Form.Label>
                                 <Form.Control
@@ -175,6 +179,7 @@ function EditProductScreen(props) {
                                     onChange={(e) => setCountInStock(e.target.value)}
                                 />
                             </Form.Group>
+
                             <Form.Group controlId="description">
                                 <Form.Label>Description</Form.Label>
                                 <Form.Control

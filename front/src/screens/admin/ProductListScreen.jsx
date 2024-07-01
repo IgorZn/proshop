@@ -2,7 +2,7 @@ import AdminRoute from "../../components/AdminRoute.jsx";
 import {Button, Col, Row, Table} from "react-bootstrap";
 import {FaEdit, FaTimes, FaTrash} from "react-icons/fa";
 import {LinkContainer} from "react-router-bootstrap";
-import {useAddProductMutation, useGetProductsQuery} from "../../slices/productApiSlice.js";
+import {useAddProductMutation, useDeleteProductMutation, useGetProductsQuery} from "../../slices/productApiSlice.js";
 import Message from "../../components/Message.jsx";
 import Loader from "../../components/Loader.jsx";
 import {toast} from "react-toastify";
@@ -19,6 +19,7 @@ function ProductListScreen(props) {
     const [logoutCall] = useLogoutMutation();
     const {data, isLoading, error} = useGetProductsQuery();
     const [addProduct, {isLoading: addProductIsLoading, error: addProductError}] = useAddProductMutation();
+    const [deleteProduct, {error: deleteError, isLoading: deleteIsLoading}] = useDeleteProductMutation()
 
     const createProductHandler = async () => {
         await addProduct({
@@ -30,9 +31,22 @@ function ProductListScreen(props) {
             description: 'sample description'})
     }
 
+    const deleteHandler = async (id) => {
+        if(window.confirm('Are you sure you want to delete this product?')) {
+            await deleteProduct(id)
+                .unwrap()
+                .then(() => toast.success('Product deleted successfully'))
+                .catch((err) => {
+                    toast.error(err?.data.message)
+                })
+        }
+    }
+
     useEffect(() => {
-        if(addProductError) {
-            toast.error(addProductError?.data.message)
+        if(addProductError || deleteError) {
+            !addProductError?.status && toast.error(addProductError?.data.message)
+            !deleteError?.status && toast.error(deleteError?.data.message)
+
             logoutCall()
             dispatch(logout());
             navigate('/login')
@@ -84,8 +98,11 @@ function ProductListScreen(props) {
                                 <Button
                                     variant="danger"
                                     className="btn-sm"
-                                    onClick={() => props.history.push(`/admin/product/${product._id}/delete`)}
+                                    disabled={deleteIsLoading}
+                                    onClick={() => deleteHandler(product._id)}
                                 >
+                                    {/*{deleteIsLoading && <Loader/>}*/}
+                                    {/*{deleteError && <Message variant="danger">{deleteError.data}</Message>}*/}
                                     <FaTrash style={{color: 'white'}}/>
                                 </Button>
                             </td>
