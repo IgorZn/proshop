@@ -8,7 +8,7 @@ function Product({product}) {
 
     return (
         <>
-            <Card className={"my-3 p-3 rounded"}>
+            <Card className={"my-3 p-3 rounded"} id={product._id}>
                 <LinkContainer to={"/product/" + product._id}>
                     <Link>
                         <Card.Img src={product.image} variant="top"/>

@@ -1,5 +1,9 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useGetProductQuery, useUpdateProductMutation} from "../../slices/productApiSlice.js";
+import {
+    useGetProductQuery,
+    useUpdateProductMutation,
+    useUploadProductImageMutation
+} from "../../slices/productApiSlice.js";
 import Loader from "../../components/Loader.jsx";
 import Message from "../../components/Message.jsx";
 import {Button, Form} from "react-bootstrap";
@@ -15,6 +19,7 @@ function EditProductScreen(props) {
     const {id} = useParams()
     const {data, error, isLoading} = useGetProductQuery(id)
     const [updateProduct, {error: updateError}] = useUpdateProductMutation()
+    const [uploadProductImage, {error: uploadImageError, isLoading: uploadImageIsLoading}] = useUploadProductImageMutation()
     const {userInfo} = useSelector(state => state.auth);
     const navigater = useNavigate();
     const [logoutCall] = useLogoutMutation();
@@ -46,11 +51,30 @@ function EditProductScreen(props) {
         console.log(updatedProductData)
         const result = await updateProduct(updatedProductData)
         if (result.error) {
-            toast.error(result.error.data.message)
+            toast.error(result?.error?.data.message)
         } else {
             toast.success('Product updated successfully')
             navigater('/admin/productlist')
         }}
+
+    const uploadImageHandler = async (e) => {
+        const formData = new FormData()
+        formData.append('uploadFile', e.target.files[0])
+
+        console.log(formData.getAll('uploadFile'))
+        console.log(e.target.files[0])
+        await uploadProductImage(formData)
+            .unwrap()
+            .then((res) => {
+                toast.success('Image uploaded successfully')
+                console.log(res)
+                setImage(res.data.path)
+            })
+            .catch((err) => {
+                console.log(err?.data.message)
+                toast.error(err?.data.message)
+            })
+    }
 
     useEffect(() => {
         if(!updateError?.data.status && updateError?.status === 403) {
@@ -105,15 +129,25 @@ function EditProductScreen(props) {
                                     onChange={(e) => setPrice(e.target.value)}
                                 />
                             </Form.Group>
+
                             <Form.Group controlId="image">
                                 <Form.Label>Image</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Enter image url"
                                     value={image}
-                                    onChange={(e) => setImage(e.target.value)}
+                                    onChange={(e) => setImage('/upload/' + e.target.value)}
                                 />
+                                <Form.Control
+                                    label="Choose File"
+                                    type="file"
+                                    name="uploadFile"
+                                    onChange={uploadImageHandler}
+                                />
+                                {uploadImageIsLoading && <Loader/>}
+                                {uploadImageError && <Message variant="danger">{uploadImageError}</Message>}
                             </Form.Group>
+
                             <Form.Group controlId="brand">
                                 <Form.Label>Brand</Form.Label>
                                 <Form.Control

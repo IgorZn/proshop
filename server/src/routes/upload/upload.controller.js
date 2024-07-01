@@ -1,9 +1,10 @@
 import {fileURLToPath} from 'url';
 import {dirname, join} from 'path';
+import path from "node:path";
 
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.resolve();
 
 
 export const uploadController = async (req, res) => {
@@ -17,7 +18,7 @@ export const uploadController = async (req, res) => {
     uploadFile = req.files.uploadFile;
     const extension = uploadFile.name.split('.').pop()
     uploadFile.name = `${Date.now()}-${uploadFile.name.substring(0,10)}.${extension}` // new name for file
-    uploadPath = join(__dirname, `../../../upload/${req.session.user._id}`, uploadFile.name)
+    uploadPath = join(__dirname, `../`, '/front/public/images',`/upload/${req.session.user._id}`, uploadFile.name)
 
     await uploadFile.mv(uploadPath, function (err) {
         if (err) return res.status(500).json({status: false, message: err});
@@ -28,7 +29,8 @@ export const uploadController = async (req, res) => {
             data: {
                 name: uploadFile.name,
                 mimetype: uploadFile.mimetype,
-                size: uploadFile.size
+                size: uploadFile.size,
+                path: join(`/images/upload/${req.session.user._id}`, uploadFile.name)
             }
         });
     })

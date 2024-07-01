@@ -1,4 +1,5 @@
 import express from 'express';
+import path from "node:path";
 import {apiV1} from "./routes/api.js";
 import morgan from 'morgan';
 import cors from 'cors';
@@ -11,6 +12,7 @@ const app = express();
 
 // MIDDLEWARES
 app.use(helmet());
+app.use(express.static('upload'))
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 app.use(morgan('combined'))
@@ -20,7 +22,7 @@ app.use(fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 },
     createParentPath: true,
     responseOnLimit: 'The file is too large',
-    // debug: true
+    debug: true
 }))
 app.use(cors({
     origin: ['http://localhost:5173', "http://localhost:5001"],

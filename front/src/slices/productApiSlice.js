@@ -1,4 +1,4 @@
-import { apiSlice } from "./apiSlice.js";
+import {apiSlice} from "./apiSlice.js";
 
 export const productsApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -6,7 +6,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             query: () => ({
                 url: '/products',
                 method: 'GET',
-        }),
+            }),
             transformResponse: async (response, meta) => {
                 return {...response, koo: 'meta.response.headers'};
             },
@@ -42,10 +42,24 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             },
             invalidatesTags: ['Products']
         }),
+
+        uploadProductImage: builder.mutation({
+            query: (body) => {
+                return {
+                    url: '/upload',
+                    method: 'POST',
+                    body,
+                };
+            },
+            invalidatesTags: ['Products']
+        }),
     }),
 })
 
-export const { useGetProductsQuery,
+export const {
+    useGetProductsQuery,
     useGetProductQuery,
     useAddProductMutation,
-    useUpdateProductMutation } = productsApiSlice
+    useUpdateProductMutation,
+    useUploadProductImageMutation
+} = productsApiSlice
