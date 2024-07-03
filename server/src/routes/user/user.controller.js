@@ -120,13 +120,64 @@ export const updateUserProfile = async (req, res) => {
         })
 }
 
-export const getUsers = (req, res) => res.send('get users')
+export const getUsers = async (req, res) => {
+    const currentUserName = req.session.user.name
+    const users = await User.find({name: {$ne: currentUserName}})
 
-export const getUserById = (req, res) => res.send('get user by id')
+    if (users) {
+        res.status(200).json({status: true, count: users.length, users})
+    } else {
+        res.status(404).json({status: false, message: 'Users not found'})
+    }
+}
 
-export const deleteUser = (req, res) => res.send('delete users')
+export const getUserById = async (req, res) => {
+    const {id} = req.params
+    await User.findById(id)
+        .select('-password')
+        .then(user => {
+            if (user) {
+                res.status(200).json({status: true, user})
+            } else {
+                res.status(404).json({status: false, message: 'User not found'})
+            }
+        })
+        .catch(err => {
+            res.status(404).json({status: false, message: err.message})
+        })
+}
 
-export const updateUserById = (req, res) => res.send('update users')
+export const deleteUser = async (req, res) => {
+    const {id} = req.params
+    await User.findByIdAndDelete(id)
+        .then(user => {
+            if (user.isAdmin) return res.status(403).json({status: false, message: 'Admin cannot be deleted'})
+
+            if (user) {
+                res.status(200).json({status: true, user})
+            } else {
+                res.status(404).json({status: false, message: 'User not found'})
+            }
+        })
+        .catch(err => {
+            res.status(404).json({status: false, message: err.message})
+        })
+}
+
+export const updateUserById = async (req, res) => {
+    const {id} = req.params
+    await User.findByIdAndUpdate(id, {$set: req.body}, {new: true})
+        .then(user => {
+            if (user) {
+                res.status(200).json({status: true, user})
+            } else {
+                res.status(404).json({status: false, message: 'User not found'})
+            }
+        })
+        .catch(err => {
+            res.status(404).json({status: false, message: err.message})
+        })
+}
 
 export const checkToken = (req, res) => {
     const {token} = req.body

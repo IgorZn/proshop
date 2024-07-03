@@ -29,5 +29,6 @@ userRouter.get("/:id", protectedRoute, getUserById)
 userRouter.delete("/:id", protectedRoute, deleteUser)
 userRouter.put("/:id", protectedRoute, updateUserById)
 
+
 // Token check
 userRouter.post("/check-token", checkToken)

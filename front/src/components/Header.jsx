@@ -15,7 +15,7 @@ function Header(props) {
     const {userInfo} = useSelector(state => state.auth);
 
     // Cookies
-    const [cookies, setCookie, removeCookie, getCookie] = useCookies(['jwt']);
+    const [removeCookie] = useCookies(['jwt']);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();

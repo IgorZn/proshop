@@ -16,6 +16,7 @@ export const protectedRoute = (req, res, next, skip= false) => {
                 res.status(403).send({status: false, message: err.message})
             } else {
                 // Add user info to req.user
+
                 req.session.user = await User.findById(decodedToken.id).select('-password')
                 next()
             }
@@ -26,7 +27,11 @@ export const protectedRoute = (req, res, next, skip= false) => {
 }
 
 export const adminRoute = (req, res, next) => {
+    const cookieToken = req?.headers?.authorization?.split('Bearer ')[1]
+    const decoded = jwt.verify(cookieToken, process.env.JWT_SECRET);
+
     console.log('adminRoute>>>',req.session.user)
+    console.log('adminRoute>>>',decoded)
     if (req.session.user && req.session.user.isAdmin) {
         next()
     } else {
