@@ -122,7 +122,9 @@ export const updateUserProfile = async (req, res) => {
 
 export const getUsers = async (req, res) => {
     const currentUserName = req.session.user.name
-    const users = await User.find({name: {$ne: currentUserName}})
+    const users = await User
+        .find({name: {$ne: currentUserName}})
+        .select('-password')
 
     if (users) {
         res.status(200).json({status: true, count: users.length, users})
@@ -166,6 +168,7 @@ export const deleteUser = async (req, res) => {
 
 export const updateUserById = async (req, res) => {
     const {id} = req.params
+    console.log(req.body)
     await User.findByIdAndUpdate(id, {$set: req.body}, {new: true})
         .then(user => {
             if (user) {

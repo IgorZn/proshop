@@ -26,8 +26,6 @@ const Message = ({variant, children}) => {
         }, 1000)
     }
 
-
-    console.log('children_Message>>>',children.data)
     return (
         <Alert variant={variant}>
             {/* eslint-disable-next-line react/prop-types */}
