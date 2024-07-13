@@ -10,7 +10,7 @@ import {useDispatch} from "react-redux";
 
 const Message = ({variant, children}) => {
     const [cookies, setCookie, removeCookie, getCookie] = useCookies(['jwt']);
-    const [jwtMessage, setJwtMessage] = useState(children?.data.message)
+    const [jwtMessage, setJwtMessage] = useState(children?.data?.message)
     const [logoutUser] = useLogoutMutation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -29,9 +29,9 @@ const Message = ({variant, children}) => {
     return (
         <Alert variant={variant}>
             {/* eslint-disable-next-line react/prop-types */}
-            {children?.data.message ? children.data.message : children}
-            {children?.data.message && toast.error('Please re-login.')}
-            {children?.data.message === 'jwt expired' && (<Navigate to="/login"/>)}
+            {children?.data?.message ? children?.data?.message : children}
+            {children?.data?.message && toast.error('Please re-login.')}
+            {children?.data?.message === 'jwt expired' && (<Navigate to="/login"/>)}
         </Alert>
     )
 }

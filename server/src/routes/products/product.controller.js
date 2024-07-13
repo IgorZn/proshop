@@ -1,5 +1,6 @@
 import {Product} from "../../schemas/mongo/product.mongo.js";
 import mongoose from "mongoose";
+const ObjectId = mongoose.Types.ObjectId;
 
 /**
  * Get all products
@@ -54,6 +55,43 @@ export const deleteProduct = async (req, res) => {
         .exec()
         .then(product => res.status(200).json({status: true, product}))
         .catch(err => res.status(404).json({status: false, message: err.message}))
+}
+
+export const createProductReview = async (req, res) => {
+    try{
+        console.log(mongoose.isValidObjectId(req.body.user))
+        const userId = mongoose.isValidObjectId(req.body.user) ? new ObjectId(req.body.user) : req.session.user._id
+        const userName = req.body.name || req.session.user.name
+        const rating = +req.body.rating || 0
+
+        const product = await Product.findById(req.params.id)
+
+        if(!product) return res.status(404).json({status: false, message: "Product not found"})
+
+        const alreadyReviewed = product.reviews.find(r => r.user.toString() === req.body.user.toString())
+
+        if(alreadyReviewed){
+            return res.status(400).json({status: false, message: "Product already reviewed"})
+        }
+
+        const review = {
+            name: userName,
+            rating: rating,
+            comment: req.body.comment,
+            user: userId
+        };
+
+        product.reviews.push(review)
+        product.numReviews = product.reviews.length
+        product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length
+
+        await product.save()
+        res.status(201).json({status: true, message: "Review added"})
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({status: false, message: e.message})
+    }
+
 }
 
 

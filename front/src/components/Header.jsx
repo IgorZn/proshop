@@ -25,11 +25,13 @@ function Header(props) {
     const logoutHandler = async () => {
         await logoutUser().unwrap()
 
+        dispatch(logout())
+        navigate("/login")
+
         removeCookie('jwt')
         removeCookie('connect.sid')
 
-        dispatch(logout())
-        navigate("/login")
+
     }
 
     return (

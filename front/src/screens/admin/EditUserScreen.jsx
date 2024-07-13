@@ -19,14 +19,13 @@ function EditUserScreen(props) {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        await updateUser({id, name, email, isAdmin: admin});
-
-        if (updateError) {
-            toast.error(updateError.data.message);
-        } else {
-            toast.success('User updated successfully');
-            navigater('/admin/users')
-        }
+        await updateUser({id, name, email, isAdmin: admin})
+            .unwrap()
+            .then(() => {
+                toast.success('User updated successfully')
+                navigater('/admin/users')
+            })
+            .catch((err) => toast.error(err?.data?.message))
     }
 
     useEffect(() => {
