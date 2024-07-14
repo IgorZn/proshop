@@ -40,6 +40,10 @@ const router = createBrowserRouter([
                 element: <HomeScreen/>,
             },
             {
+                path: "/page/:pageNumber",
+                element: <HomeScreen/>,
+            },
+            {
                 path: "/product/:productId",
                 element: <ProductScreen/>,
             },

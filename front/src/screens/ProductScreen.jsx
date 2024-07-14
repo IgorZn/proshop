@@ -5,9 +5,10 @@ import Rating from "../components/Rating.jsx";
 import {useCreateReviewMutation, useGetProductQuery} from "../slices/productApiSlice.js";
 import Loader from "../components/Loader.jsx";
 import Message from "../components/Message.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {addToCart} from "../slices/cartSlice.js";
 import {useDispatch, useSelector} from "react-redux";
+import {toast} from "react-toastify";
 
 
 function ProductScreen(props) {
@@ -32,12 +33,21 @@ function ProductScreen(props) {
 
         await addReview({rating, comment, id: data.product._id, user: userInfo._id, name: userInfo.name})
             .unwrap()
-            .then(res => console.log(res))
+            .then(res => {
+                toast.success(res.message)
+            })
             .catch(err => console.log(err))
 
         setRating(0)
         setComment('')
     }
+
+    useEffect(() => {
+        if (errorReview?.status === 403) {
+            toast.error(errorReview?.data.message)
+            toast.info('Please re-login to continue')
+        }
+    }, [errorReview, isLoadingReview]);
 
     return (
         <>

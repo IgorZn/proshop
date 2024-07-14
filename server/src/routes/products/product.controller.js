@@ -9,9 +9,16 @@ const ObjectId = mongoose.Types.ObjectId;
  * @returns {Promise<*>}
  */
 export const getProducts = async (req, res) => {
-    // console.log('getProducts>>>', req.session)
+    const pageSize = +req.query.pageSize || 2
+    const page = +req.query.pageNumber || 1
+    const count = await Product.countDocuments()
+
     await Product.find({})
-        .then(products => res.status(200).json({status: true, products}))
+        .limit(pageSize)
+        .skip((page * pageSize) - pageSize)
+        .then(products => {
+            res.status(200).json({status: true, products, page, pages: Math.ceil(count / pageSize)})
+        })
         .catch(err => res.status(500).json({status: false, message: err.message}))}
 
 /**
@@ -59,8 +66,7 @@ export const deleteProduct = async (req, res) => {
 
 export const createProductReview = async (req, res) => {
     try{
-        console.log(mongoose.isValidObjectId(req.body.user))
-        const userId = mongoose.isValidObjectId(req.body.user) ? new ObjectId(req.body.user) : req.session.user._id
+        const userId = mongoose.isValidObjectId(req.body.user) ?req.body.user : req.session.user._id
         const userName = req.body.name || req.session.user.name
         const rating = +req.body.rating || 0
 

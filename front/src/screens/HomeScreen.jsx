@@ -4,9 +4,11 @@ import Product from "../components/Product.jsx";
 import { useGetProductsQuery} from "../slices/productApiSlice.js";
 import Loader from "../components/Loader.jsx";
 import Message from "../components/Message.jsx";
+import {Link, useParams} from "react-router-dom";
 
 function HomeScreen(props) {
-    const {data, error, isLoading} = useGetProductsQuery();
+    const {pageNumber} = useParams()
+    const {data, error, isLoading} = useGetProductsQuery({pageNumber});
 
     return (
         <>
@@ -26,6 +28,7 @@ function HomeScreen(props) {
                     </Row>
                 </>
             ) : null}
+
         </>
     );
 }
