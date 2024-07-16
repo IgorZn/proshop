@@ -88,6 +88,10 @@ const router = createBrowserRouter([
                 element: <ProductListScreen/>,
             },
             {
+                path: "/admin/productlist/:pageNumber",
+                element: <ProductListScreen/>,
+            },
+            {
                 path: "/admin/users",
                 element: <UserListScreen/>,
             },

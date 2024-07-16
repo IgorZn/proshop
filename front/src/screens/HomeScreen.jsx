@@ -5,6 +5,7 @@ import { useGetProductsQuery} from "../slices/productApiSlice.js";
 import Loader from "../components/Loader.jsx";
 import Message from "../components/Message.jsx";
 import {Link, useParams} from "react-router-dom";
+import Paginate from "../components/Paginate.jsx";
 
 function HomeScreen(props) {
     const {pageNumber} = useParams()
@@ -26,6 +27,7 @@ function HomeScreen(props) {
                             </Col>
                         ))}
                     </Row>
+                    <Paginate pages={data.pages} page={data.page} isAdmin={false}/>
                 </>
             ) : null}
 

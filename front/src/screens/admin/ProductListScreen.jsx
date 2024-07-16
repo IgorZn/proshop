@@ -6,18 +6,21 @@ import {useAddProductMutation, useDeleteProductMutation, useGetProductsQuery} fr
 import Message from "../../components/Message.jsx";
 import Loader from "../../components/Loader.jsx";
 import {toast} from "react-toastify";
-import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useEffect} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import {useLogoutMutation} from "../../slices/usersApiSlice.js";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../../slices/authSlice.js";
+import Paginate from "../../components/Paginate.jsx";
 
 
 function ProductListScreen(props) {
     const navigate = useNavigate();
+    const {userInfo} = useSelector(state => state.auth);
+    const {pageNumber} = useParams();
     const dispatch = useDispatch();
     const [logoutCall] = useLogoutMutation();
-    const {data, isLoading, error} = useGetProductsQuery();
+    const {data, isLoading, error} = useGetProductsQuery({pageNumber: pageNumber || 1});
     const [addProduct, {isLoading: addProductIsLoading, error: addProductError}] = useAddProductMutation();
     const [deleteProduct, {error: deleteError, isLoading: deleteIsLoading}] = useDeleteProductMutation()
 
@@ -111,6 +114,8 @@ function ProductListScreen(props) {
                     </tbody>
                 </Table>
             )}
+            {isLoading ? <Loader/> : (<Paginate pages={data.pages} page={data.page} isAdmin={userInfo.isAdmin}/>)}
+
         </AdminRoute>
     );
 }
