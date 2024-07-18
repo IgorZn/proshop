@@ -9,6 +9,7 @@ import {logout} from "../slices/authSlice.js";
 import {useCookies} from "react-cookie";
 
 import React from 'react';
+import SearchBox from "./SearchBox.jsx";
 
 function Header(props) {
     const {cartItem} = useSelector(state => state.cart);
@@ -49,6 +50,7 @@ function Header(props) {
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
+                            <SearchBox/>
                             <LinkContainer to={"/cart"}>
                                 <Nav.Link>
                                     <FaShoppingCart/> Cart

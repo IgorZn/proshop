@@ -3,10 +3,10 @@ import {apiSlice} from "./apiSlice.js";
 export const productsApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getProducts: builder.query({
-            query: ({pageNumber}) => ({
+            query: ({pageNumber, keyword}) => ({
                 url: '/products',
                 method: 'GET',
-                params: {pageNumber}
+                params: {pageNumber, keyword}
             }),
             transformResponse: async (response, meta) => {
                 return {...response, koo: 'meta.response.headers'};

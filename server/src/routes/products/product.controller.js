@@ -9,11 +9,17 @@ const ObjectId = mongoose.Types.ObjectId;
  * @returns {Promise<*>}
  */
 export const getProducts = async (req, res) => {
-    const pageSize = +req.query.pageSize || 2
+    const pageSize = +req.query.pageSize || 10
     const page = +req.query.pageNumber || 1
-    const count = await Product.countDocuments()
 
-    await Product.find({})
+
+    const keyWord = req.query.keyword ? {name: {$regex: req.query.keyword, $options: "i"}} : {}
+    if(mongoose.isValidObjectId(req.query.category)){
+        keyWord.category = req.query.category
+    }
+
+    const count = await Product.countDocuments({...keyWord})
+    await Product.find({...keyWord})
         .limit(pageSize)
         .skip((page * pageSize) - pageSize)
         .then(products => {

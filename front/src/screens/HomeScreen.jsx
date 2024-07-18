@@ -8,11 +8,16 @@ import {Link, useParams} from "react-router-dom";
 import Paginate from "../components/Paginate.jsx";
 
 function HomeScreen(props) {
-    const {pageNumber} = useParams()
-    const {data, error, isLoading} = useGetProductsQuery({pageNumber});
+    const {pageNumber, keyword} = useParams()
+    const {data, error, isLoading} = useGetProductsQuery({pageNumber, keyword});
 
     return (
         <>
+            {keyword && (
+                <Link to="/" className="btn btn-light mb-4">
+                    Go Back
+                </Link>
+            )}
             {error ? (
                 <Message variant="danger">{error}</Message>
             ) : isLoading ? (
@@ -27,7 +32,12 @@ function HomeScreen(props) {
                             </Col>
                         ))}
                     </Row>
-                    <Paginate pages={data.pages} page={data.page} isAdmin={false}/>
+                    <Paginate
+                        pages={data.pages}
+                        page={data.page}
+                        isAdmin={false}
+                        keyword={keyword ? keyword : ''}
+                    />
                 </>
             ) : null}
 
