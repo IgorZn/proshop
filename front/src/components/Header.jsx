@@ -8,7 +8,6 @@ import {useLogoutMutation} from "../slices/usersApiSlice.js";
 import {logout} from "../slices/authSlice.js";
 import {useCookies} from "react-cookie";
 
-import React from 'react';
 import SearchBox from "./SearchBox.jsx";
 
 function Header(props) {

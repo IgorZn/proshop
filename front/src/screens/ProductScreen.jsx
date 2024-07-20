@@ -9,6 +9,7 @@ import {useEffect, useState} from "react";
 import {addToCart} from "../slices/cartSlice.js";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
+import {useTitle} from "../hooks/useTitle.js";
 
 
 function ProductScreen(props) {
@@ -22,6 +23,8 @@ function ProductScreen(props) {
     const {userInfo} = useSelector(state => state.auth)
     const [rating, setRating] = useState(0)
     const [comment, setComment] = useState('')
+
+    useTitle(data?.product.name)
 
     const addToCartHandler = () => {
         dispatch(addToCart({...data.product, qty}))
